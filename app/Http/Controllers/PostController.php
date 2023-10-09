@@ -74,25 +74,29 @@ class PostController extends Controller
     protected function createPost(Request $request) {
 
 
-//        $image = $request->file('postPreview');
-//
-//        $imageName = time() . '.' . $image->getClientOriginalExtension();
-//
-//        // Загружаем файл в S3 Bucket
-//        Storage::disk('s3')->put($imageName, file_get_contents($image));
-//
-//        // Вернуть URL загруженного файла
-//        $url = Storage::disk('s3')->url($imageName);
+        $image = $request->file('postPreview');
 
-        Storage::put('test.txt', 'Hello world!');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+        // Загружаем файл в S3 Bucket
+        Storage::disk('s3')->put('postPreviews/'.$imageName, file_get_contents($image));
+
+        // Вернуть URL загруженного файла
+        $url = Storage::disk('s3')->url($imageName);
+
+
         $postData = [
             'title' => $request->input('postTitle'),
             'content' => $request->input('postContent'),
             'category_id' => $request->get('postCategorySelect'),
             'is_published' => $request->input('is_post_published') == "on" ? 1 : 0,
-            'preview' => '', // Use the S3 URL here
+            'preview' => $url, // Use the S3 URL here
         ];
 
-        return response()->json($postData);
+        Post::create($postData);
+
+        return redirect('http://127.0.0.1:8000/adminPanel/tableWidget?posts');
+
+
     }
 }

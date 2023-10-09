@@ -42,10 +42,6 @@ Route::group([
     Route::post('/adminPanel/tableWidget/createPost', [PostController::class, 'createPost'])->name('post.create');
 });
 
-Route::get('/passFile', function (){
-    dump(Storage::put('text.txt', 'Hello world', 'public'));
-    return response();
-});
 
 // SEARCH THE POSTS
 Route::get('/getPostsByParams',
