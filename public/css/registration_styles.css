@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;1,400&display=swap');
+*{
+    font-family: 'Josefin Sans', sans-serif;
+}
+a {
+    display: flex;
+    text-decoration: none !important;
+    color: white !important;
+    justify-content: center;
+    align-items: center;
+}
+body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.registration__container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+.image__container, .form__container {
+    width: 100%;
+}
+
+.image__container > img {
+    width: 100%;
+
+}
+
+.image__container {
+    background-image: url('../imgs/reg_back.jpg');
+    background-size: cover;
+    background-position: center;
+    box-shadow: inset -2px 0px 12px 4px rgba(0,0,0,0.63);
+
+}
+
+
+.form__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.form__subcontainer {
+    width: 400px;
+    height: 480px;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    border-radius: 2em;
+    box-shadow:
+        7px 10px 10px rgba(0, 0, 0, .3),
+        -1em -1em  rgba(231, 79, 79, 0.4),
+        -2em -2em rgba(114,150,148, 0.7),
+        5px 5px 5px rgba(250,191,123, .3) inset,
+        -5px -5px 1em rgba(250,191,123, 0.3) inset,
+        5px 5px 2em rgba(250,191,123, 0.3) inset;
+}
+
+.form__item {
+    display: flex;
+    flex-direction: column;
+}
+
+.form__item > input {
+    font-size: 1.2em;
+    border: none !important;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, .3);
+}
+
+.form__item > input:focus {
+    outline: 1px !important;
+}
+
+.submit-btn {
+    border: none;
+    background-color: #0d6efd;
+    color: white;
+    height: 35px;
+    margin-top: 15px;
+    box-shadow: 0 0 11px rgba(0, 0, 0, .3);
+    transition: all .5s;
+}
+
+.errors-spans {
+    color: #ff0000;
+}
+
+.login-btn {
+    background-color: rgba(101,125,124, .7);
+}
+
+.submit-btn:hover {
+    box-shadow: inset -10px 10px 11px rgba(0, 0, 0, .3);
+}
+
+.btns{
+    display: flex;
+    gap: .5em;
+
+}
+.btns > * {
+    width: 100%;
+}
+
+
+@media screen and (max-width: 951px) {
+    .form__container{
+        background-image: url('../imgs/reg_back.jpg');
+        background-size: cover;
+        background-position: center;
+        z-index: 1;
+    }
+
+    .form__container:before {
+        content: "";
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        display: block;
+        backdrop-filter: blur(5px);
+    }
+
+    .form__subcontainer {
+        background: white;
+        width: 400px;
+        height: 480px;
+        border-radius: 2em;
+        box-shadow:
+            7px 10px 10px rgba(0, 0, 0, .3),
+            5px 5px 5px rgba(250,191,123, .3) inset,
+            -5px -5px 1em rgba(250,191,123, 0.3) inset,
+            5px 5px 2em rgba(0, 0, 0, 0.3) inset;
+    }
+
+    .image__container {
+        display: none;
+    }
+}
