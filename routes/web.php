@@ -20,8 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group([
     'middleware' => ['web'],
     'prefix' => 'auth'
-], function ($router) {
-
+], function () {
     Route::post('login', [AuthController::class, 'login'])
         ->name('login');
 
@@ -39,11 +38,20 @@ Route::group([
     Route::get('/adminPanel', [AdminPanelController::class, 'index'])->name('adminPanel');
     Route::get('/adminPanel/tableWidget', [AdminPanelController::class, 'tableWidget'])->name('tableWidget');
     Route::get('/adminPanel/tableWidget/getPost/{postId}', [AdminPanelController::class, 'getPost'])->name('getPostById');
-    Route::post('/adminPanel/tableWidget/createPost', [PostController::class, 'createPost'])->name('post.create');
 });
 
 
-// SEARCH THE POSTS
+// -------------- GROUP FOR CRUD POSTS -----------------
+Route::group([
+    'middleware'=>'auth:web'
+], function (){
+    Route::post('/adminPanel/tableWidget/createPost', [PostController::class, 'createPost'])->name('post.create');
+    Route::patch('/adminPanel/tableWidget/updatePost', [PostController::class, 'updatePost'])->name('post.update');
+    Route::delete('/adminPanel/tableWidget/deletePost', [PostController::class, 'deletePost'])->name('post.delete');
+});
+
+
+// --------------- SEARCH THE POSTS -----------------
 Route::get('/getPostsByParams',
     [PostController::class, 'getPostsByParams'])
     ->name('get.posts.by.params');
@@ -52,7 +60,7 @@ Route::get('/getPostsBySearch',
     [PostController::class, 'getPostsBySearch'])
     ->name("get.posts.by.search");
 
-// VIEW THE FORMS
+// ---------------- VIEW THE FORMS -------------------
 Route::get('/login-index',
     [LoginController::class, 'index'])
     ->name('login.index');
@@ -61,14 +69,12 @@ Route::get('/register',
     [RegisterController::class, 'index'])
     ->name('registration.index');
 
-// MIDDLEWARE VALIDATION
+// -------------- MIDDLEWARE VALIDATION --------------
 Route::post('/register',
     [RegisterController::class, 'register'])
     ->name("register")
     ->middleware('registration');
 
-
-Route::get('/updateTest', [RegisterController::class, 'updateUser']);
 
 
 

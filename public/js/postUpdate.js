@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const postTitle = document.getElementsByName('title')[0];
                 const postContent = document.getElementsByName('content')[0];
-                const postCategory = document.getElementsByName('postCategorySelect')[1];
+                const postCategory = document.getElementsByName('postCategorySelect__updateForm')[0];
                 const postPublished = document.getElementsByName('is_published')[0];
                 const postPreview = document.getElementsByName('preview')[0];
 

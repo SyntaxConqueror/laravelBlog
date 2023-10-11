@@ -36,10 +36,10 @@
 
 @section('post__update__form')
 
-    <form method="POST" action="" class="create-form">
+    <form method="POST" action="{{route('post.update')}}" enctype="multipart/form-data" class="create-form">
         @csrf
+        @method('PATCH')
         <div class="create-block">
-
             <label>
                 <span>Choose id: </span>
                 <select id="postSelect" name="selectedPostId">
@@ -61,7 +61,7 @@
         <div class="create-block">
             <span>Category</span>
             <label>
-                <select id="postCategorySelect" name="postCategorySelect">
+                <select id="postCategorySelect" name="postCategorySelect__updateForm">
                     @foreach($categories as $category)
                         <option class="category__option" value="{{$category->id}}">{{ $category->name }}</option>
                     @endforeach
@@ -92,12 +92,14 @@
 
 
 @section('post__delete__form')
-    <form action="" class="create-form">
+    <form method="POST" action="{{route('post.delete')}}" enctype="multipart/form-data" class="create-form">
+        @csrf
+        @method('DELETE')
         <div class="create-block">
 
             <label>
                 <span>Choose id: </span>
-                <select id="postSelect" name="selectedPostId">
+                <select id="postSelect" name="selectedPostId__deleteForm">
                     @foreach($posts as $post)
                         <option value="{{$post->id}}">{{$post->id}}</option>
                     @endforeach

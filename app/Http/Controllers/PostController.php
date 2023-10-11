@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -71,32 +72,61 @@ class PostController extends Controller
         return $posts;
     }
 
+    protected function uploadPreview ($preview) {
+        $imageName = time() . '.' . $preview->getClientOriginalExtension();
+
+        // Upload file to s3 bucket
+        Storage::disk('s3')->put('postPreviews/'.$imageName, file_get_contents($preview));
+
+        // Return uploaded file url
+        return Storage::disk('s3')->url($imageName);
+    }
+
     protected function createPost(Request $request) {
 
-
         $image = $request->file('postPreview');
-
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-
-        // Загружаем файл в S3 Bucket
-        Storage::disk('s3')->put('postPreviews/'.$imageName, file_get_contents($image));
-
-        // Вернуть URL загруженного файла
-        $url = Storage::disk('s3')->url($imageName);
-
+        $url = $this->uploadPreview($image);
 
         $postData = [
             'title' => $request->input('postTitle'),
             'content' => $request->input('postContent'),
             'category_id' => $request->get('postCategorySelect'),
             'is_published' => $request->input('is_post_published') == "on" ? 1 : 0,
-            'preview' => $url, // Use the S3 URL here
+            'preview' => $url,
         ];
 
         Post::create($postData);
 
         return redirect('http://127.0.0.1:8000/adminPanel/tableWidget?posts');
 
+    }
 
+    protected function updatePost (Request $request) {
+
+
+        $post = Post::find($request->get('selectedPostId'));
+
+        $preview = $request->file('preview');
+        $url = $preview != null ? $this->uploadPreview($preview) : $post->preview;
+
+        $postData = [
+            'title' => $request->input('title'),
+            'content'=> $request->input('content'),
+            'category_id'=> $request->get('postCategorySelect__updateForm'),
+            'is_published' => $request->input('is_published') == "on" ? 1 : 0,
+            'preview' => $url,
+        ];
+
+        $post->update($postData);
+        return redirect('http://127.0.0.1:8000/adminPanel/tableWidget?posts');
+    }
+
+    protected function deletePost(Request $request) {
+
+        $post = Post::find($request->get('selectedPostId__deleteForm'));
+
+        if ($post != null) $post->delete();
+
+        return redirect(session()->previousUrl());
     }
 }
