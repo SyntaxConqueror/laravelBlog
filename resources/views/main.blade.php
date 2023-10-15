@@ -43,7 +43,7 @@
                         </li>
                         <li class="nav-item">
                             <a
-                                class="nav-link {{ auth()->user()->role == 'Admin' ? '' : 'disabled'  }}"
+                                class="nav-link {{ strtolower(auth()->user()->role) == 'admin' ? '' : 'disabled'  }}"
                                 href={{route('adminPanel')}} aria-disabled="true"
                             >Admin panel
                             </a>

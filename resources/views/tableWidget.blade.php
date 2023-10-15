@@ -31,13 +31,13 @@
             </table>
 
         </div>
+        @if(!request()->hasAny(['migrations', 'post_user', 'post_tag', 'failed_jobs', 'password_reset_tokens', 'personal_access_tokens']))
         <div class="crud-container">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Create</button>
                     <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Update</button>
                     <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Delete</button>
-
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
@@ -45,19 +45,44 @@
                     @if(request()->has('posts'))
                         @yield('post__create__form')
                     @endif
+
+                    @if(request()->has('tags') || request()->has('categories'))
+                        @yield('categories_tags_create_form')
+                    @endif
+
+                    @if(request()->has('users'))
+                        @yield('users_create_form')
+                    @endif
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                     @if(request()->has('posts'))
                         @yield('post__update__form')
+                    @endif
+
+                    @if(request()->has('tags') || request()->has('categories'))
+                        @yield('categories_tags_update_form')
+                    @endif
+
+                    @if(request()->has('users'))
+                        @yield('users_update_form')
                     @endif
                 </div>
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
                     @if(request()->has('posts'))
                         @yield('post__delete__form')
                     @endif
+
+                    @if(request()->has('tags') || request()->has('categories'))
+                        @yield('categories_tags_delete_form')
+                    @endif
+
+                    @if(request()->has('users'))
+                        @yield('users_delete_form')
+                    @endif
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
 @endsection

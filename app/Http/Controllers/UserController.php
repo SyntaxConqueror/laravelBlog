@@ -9,29 +9,44 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public static function create(Request $request) {
-        $hashedPassword = Hash::make($request->get('password'));
+        $hashedPassword = Hash::make($request->input('password'));
 
-        $user = new User();
+        $userData = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $hashedPassword,
+            'role' => $request->get('selectedRole__createForm')
+        ];
 
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
-        $user->password = $hashedPassword;
-        $user->role = "User";
+        User::create($userData);
 
-        return $user;
+        return redirect(session()->previousUrl());
     }
 
-    protected static function delete($id) {
-        $user = User::query()->find($id);
-        return ($user != null) ? $user->delete() : false;
+    protected static function delete(Request $request) {
+        $user = User::find($request->get('selectedUserId__deleteForm'));
+        $user->delete();
+        return redirect(session()->previousUrl());
     }
 
-    public static function update(array $newUser, $id){
-        $user = User::query()->find($id);
+    public static function update(Request $request){
+        $user = User::find($request->get('selectedUserId__updateForm'));
         try {
-            return $user->update($newUser);
+            $hashedPassword = Hash::make($request->input('passwordU'));
+            $userData = [
+                'name' => $request->input('nameU'),
+                'email' => $request->input('emailU'),
+                'password' => $hashedPassword,
+                'role' => $request->get('selectedRole__updateForm')
+            ];
+            $user->update($userData);
+            return redirect(session()->previousUrl());
         } catch (\Exception $e) {
             return $e;
         }
+    }
+
+    public function getUserById(Request $request){
+        return User::find($request->userId);
     }
 }

@@ -34,9 +34,4 @@ class RegisterController extends Controller
         return redirect()->route('login.index');
     }
 
-    protected function updateUser() {
-        UserController::update(["name"=>"Artem"], 1);
-        return User::query()->find(1);
-    }
-
 }

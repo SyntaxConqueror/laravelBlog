@@ -44,6 +44,8 @@ class AdminPanelController extends Controller
         $posts = Schema::getConnection()->table('posts')->get();
         $categories = Schema::getConnection()->table('categories')->get();
         $tags = Schema::getConnection()->table('tags')->get();
+        $post_tag = Schema::getConnection()->table('post_tag')->get();
+        $users_posts = Schema::getConnection()->table('post_user')->get();
         $tablesFromDB = Schema::getAllTables();
         $tables = array_map(function($item) {
             return $item->Tables_in_fphp;
@@ -60,7 +62,9 @@ class AdminPanelController extends Controller
             'users',
             'posts',
             'categories',
-            'tags');
+            'tags',
+            'post_tag',
+            'users_posts');
 
         $additionalViews = [];
         if($request->hasAny($tables)){
@@ -72,7 +76,5 @@ class AdminPanelController extends Controller
         return $tableWidgetView->with($additionalViews);
     }
 
-    public function getPost(Request $request) {
-        return Post::find($request->postId);
-    }
+
 }

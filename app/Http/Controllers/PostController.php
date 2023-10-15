@@ -11,6 +11,7 @@ use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\Input;
 
@@ -67,11 +68,6 @@ class PostController extends Controller
         return view('main', compact('posts', 'categories', 'tags'));
     }
 
-    protected function getAllPosts() {
-        $posts = Post::all();
-        return $posts;
-    }
-
     protected function uploadPreview ($preview) {
         $imageName = time() . '.' . $preview->getClientOriginalExtension();
 
@@ -86,6 +82,7 @@ class PostController extends Controller
 
         $image = $request->file('postPreview');
         $url = $this->uploadPreview($image);
+        $tags = $request->input('tags', []);
 
         $postData = [
             'title' => $request->input('postTitle'),
@@ -95,19 +92,22 @@ class PostController extends Controller
             'preview' => $url,
         ];
 
-        Post::create($postData);
+        $user = Auth::user();
+        $post = Post::create($postData);
 
-        return redirect('http://127.0.0.1:8000/adminPanel/tableWidget?posts');
+        $post->users()->attach($user);
+        $post->tags()->attach($tags);
+        return redirect(session()->previousUrl());
 
     }
 
     protected function updatePost (Request $request) {
 
-
         $post = Post::find($request->get('selectedPostId'));
 
         $preview = $request->file('preview');
         $url = $preview != null ? $this->uploadPreview($preview) : $post->preview;
+        $tags = $request->input('tags', []);
 
         $postData = [
             'title' => $request->input('title'),
@@ -118,15 +118,25 @@ class PostController extends Controller
         ];
 
         $post->update($postData);
-        return redirect('http://127.0.0.1:8000/adminPanel/tableWidget?posts');
+        $post->tags()->sync($tags);
+        return redirect(session()->previousUrl());
     }
 
     protected function deletePost(Request $request) {
-
         $post = Post::find($request->get('selectedPostId__deleteForm'));
-
         if ($post != null) $post->delete();
-
         return redirect(session()->previousUrl());
+    }
+
+    public function getPostById(Request $request) {
+        $post = Post::find($request->postId);
+        $post->tags()->detach();
+        $post->users()->detach();
+        return $post;
+    }
+
+    protected function getAllPosts() {
+        $posts = Post::all();
+        return $posts;
     }
 }

@@ -16,10 +16,16 @@
     gap: 1em;
     padding: 1em;
 }
-.create-block{
+.form__block{
     display: flex;
     flex-direction: column;
 }
+
+.checkbox__block{
+    display: grid !important;
+    grid-template-columns: repeat(5, auto);
+}
+
 .publish__checkbox {
     width: 20px;
     height: 20px;
@@ -37,7 +43,7 @@
 .form__submit__button>button {
     color: #fff;
     border: none;
-    width: 150px;
+    width: 180px;
     aspect-ratio: 4;
     background-color: #333;
 }

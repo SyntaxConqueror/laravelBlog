@@ -38,7 +38,7 @@
                     aria-labelledby="offcanvasDarkNavbarLabel"
                 >
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
+                        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">ADMIN MENU</h5>
                         <button
                             type="button"
                             class="btn-close btn-close-white"
@@ -66,10 +66,6 @@
                                         <li><a class="dropdown-item" href="{{route('tableWidget', $table)}}">{{$table}}</a></li>
                                     @endforeach
 
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
                                 </ul>
                             </li>
                         </ul>
